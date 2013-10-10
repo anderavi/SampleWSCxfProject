@@ -1,0 +1,61 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	
+	 <bean id="securityInterceptor" class="com.sample.interceptor.BasicAuthAuthorizationInterceptor">
+	      <property name="users">
+	        <map>
+	          <entry key="anderavi" value="ande004"/>
+	        </map>
+	      </property>
+	    </bean>
+
+	<jaxws:endpoint id="sampleService"
+		implementor="com.sample.service.impl.SampleWebServiceImpl" address="/SampleService" />
+	<jaxws:endpoint id="echoService"
+		implementor="com.sample.service.impl.EchoWebServiceImpl" address="/EchoService" >
+		<jaxws:inInterceptors>
+	        <ref bean="securityInterceptor"/>
+	      </jaxws:inInterceptors>
+	</jaxws:endpoint>	
+	
+	<!-- 
+	
+	Setting up basic security
+		<beans xmlns="http://www.springframework.org/schema/beans"
+02	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+03	    xmlns:jaxws="http://cxf.apache.org/jaxws"
+04	    xsi:schemaLocation="
+05	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+06	    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+07	     
+08	    <bean id="securityInterceptor" class="BasicAuthAuthorizationInterceptor">
+09	      <property name="users">
+10	        <map>
+11	          <entry key="username" value="password"/>
+12	        </map>
+13	      </property>
+14	    </bean>
+15	 
+16	    <bean id="service" class="sample.Service"/>
+17	     
+18	    <jaxws:endpoint
+19	      id="serviceEndpoint"
+20	      implementor="#service"
+21	      address="${services.url}/Service">
+22	      <jaxws:inInterceptors>
+23	        <ref bean="securityInterceptor"/>
+24	      </jaxws:inInterceptors>
+25	    </jaxws:endpoint>
+26	</beans>
+	 -->
+</beans>
